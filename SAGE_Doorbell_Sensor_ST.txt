@@ -50,36 +50,13 @@ metadata {
         fingerprint endpointId: "12", inClusters: "0000,0003,0009,0001", outClusters: "0003,0006,0008,0019", model: "Bell", manufacturer: "Echostar"
     }
     
-    simulator {
-    
-    }
+
     
     preferences {
         input "timeBetweenPresses", "number", title: "Seconds allowed between presses (increase this value to eliminate duplicate notifications)",  defaultValue: 10,  displayDuringSetup: true, required: false	
     } 
  
-	tiles(scale: 2) {
-		standardTile("button1", "device.button1", width: 3, height: 3) {
-			state "1: ring", label: '${name}', icon: "st.alarm.alarm.alarm", backgroundColor: "#ffa81e"
-			state "1: silent", label: '${name}', icon: "st.Home.home30", backgroundColor: "#79b821"
-		}
-
-		standardTile("button2", "device.button2", width: 3, height: 3) {
-			state "2: ring", label: '${name}', icon: "st.alarm.alarm.alarm", backgroundColor: "#ffa81e"
-			state "2: silent", label: '${name}', icon: "st.Home.home30", backgroundColor: "#79b821"
-		}
-        
-		valueTile("battery", "device.battery", decoration: "flat", inactiveLabel: false, width: 2, height: 2) {
-			state "battery", label:'${currentValue}% battery', unit:""
-		}
-
-		standardTile("refresh", "device.refresh", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
-			state "default", action:"refresh.refresh", icon:"st.secondary.refresh"
-		}
-
-		main (["button1","button2"])
-		details(["button1","button2","battery","refresh"])
-	}
+	
 }
  
 def parse(String description) {
@@ -99,7 +76,7 @@ def parse(String description) {
     if (description?.startsWith('enroll request')) {
     	List cmds = enrollResponse()
         log.debug "enroll response: ${cmds}"
-        result = cmds?.collect { new physicalgraph.device.HubAction(it) }
+        result = cmds?.collect { new hubitat.device.HubAction(it) }
     }
     return result
 }
