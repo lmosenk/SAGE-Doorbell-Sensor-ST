@@ -42,7 +42,7 @@ metadata {
 	definition (name: "SAGE Doorbell Sensor", namespace: "darwinsden", author: "darwin@darwinsden.com") {
     	//capability "Battery"
 		capability "Configuration"
-        capability "Button"
+        capability "Pushable Button"
 		capability "Refresh"
      
         command "enrollResponse"
@@ -180,9 +180,8 @@ private Map getDoorbellPressResult(cluster) {
             if (!isDuplicateCall(state.lastButton2Updated, state.timeBetweenPresses) )
             {
 		       //log.debug ("BUTTON2 PRESS!")               
-               result = [ name: 'button', value: "pushed", data: [buttonNumber: 2], isStateChange: true ]
-               sendEvent([name: "button2", value: "2: ring"])
-               runIn(5, button2DisplayReset) 
+               result = [ name: 'pushed', value: "2", isStateChange: true ]
+               sendEvent(name: "pushed", value: "2", isStateChange: true)
             }
             state.lastButton2Updated = new Date().time	
             break
@@ -192,23 +191,13 @@ private Map getDoorbellPressResult(cluster) {
             {		
 		       //log.debug ("BUTTON1 PRESS!")
                result = [ name: 'button', value: "pushed", data: [buttonNumber: 1], isStateChange: true]
-               sendEvent ([name: "button1", value: "1: ring"])
-               runIn(5, button1DisplayReset) 
+               sendEvent (name: "pushed", value: "1", isStateChange: true) 
             }
             state.lastButton1Updated = new Date().time
-            break
     }
-    
     return result
 }
 
-def button1DisplayReset() {
-    sendEvent ([name: "button1", value: "1: silent"])
-}
-
-def button2DisplayReset() {
-    sendEvent ([name: "button2", value: "2: silent"])
-}
 
 
 def refresh() {
